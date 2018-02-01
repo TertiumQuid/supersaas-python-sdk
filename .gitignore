@@ -46,10 +46,6 @@ coverage.xml
 *.cover
 .hypothesis/
 
-# Translations
-*.mo
-*.pot
-
 # pyenv
 .python-version
 
@@ -61,5 +57,5 @@ coverage.xml
 venv/
 ENV/
 
-# mypy
-.mypy_cache/
+# IDE
+.idea/*
