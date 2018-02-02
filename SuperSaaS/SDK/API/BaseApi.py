@@ -14,6 +14,9 @@ class BaseApi(object):
     def _validate_id(self, value):
         return value
 
+    def _validate_number(self, value):
+        return self._validate_id(value)
+
     def _validate_present(self, value):
         if not value:
             raise Error("Required parameter is missing.")
@@ -32,5 +35,5 @@ class BaseApi(object):
         if value in options:
             return value
         else:
-            raise Error("Invalid option parameter: {}. Must be one of #{}.".format(value, ', '.join(options)))
+            raise Error("Invalid option parameter: {}. Must be one of {}.".format(value, ', '.join(options)))
 

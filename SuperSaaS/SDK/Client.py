@@ -45,6 +45,10 @@ class Client(object):
         cls.instance().test = test
         cls.instance().test = host or cls.instance().host
 
+    @classmethod
+    def _user_agent(self):
+        return "SSS/{} Python/{} API/{}".format(VERSION, PYTHON_VERSION, API_VERSION)
+
     def __init__(self, configuration):
         self.account_name = configuration.account_name
         self.user_name = configuration.user_name
@@ -73,7 +77,7 @@ class Client(object):
         headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'User-Agent': self.__user_agent(),
+            'User-Agent': self._user_agent(),
             'Authorization': "Basic {}".format(auth)
         }
 
@@ -85,7 +89,9 @@ class Client(object):
             querystring = urlencode(query)
             url = "{}?{}".format(url, querystring)
 
-        req = Request(url, params, headers)
+        data = dict(filter(lambda item: item[1] is not None, params.items()))
+        data = json.dumps(data)
+        req = Request(url, data, headers)
 
         if http_method == 'GET':
             req.get_method = http_method
@@ -96,17 +102,16 @@ class Client(object):
         elif http_method == 'DELETE':
             req.get_method = http_method
         else:
-            raise Error("Invalid HTTP Method: {}. Only `:get`, `:post`, `:put`, `:delete` supported.".format(http_method))
+            raise Error("Invalid HTTP Method: {}. Only `GET`, `POST`, `PUT`, `DELETE` supported.".format(http_method))
+
+        self.last_request = req
 
         try:
             res = urlopen(req)
             data = json.load(res.read())
             return data
         except HTTPError, e:
-            raise Error("HTTP Request Error (#{}): #{}".format(url, e.reason))
-
-    def __user_agent(self):
-        return "SSS/{} Python/{} API/{}".format(VERSION, PYTHON_VERSION, API_VERSION)
+            raise Error("HTTP Request Error ({}): {}".format(url, e.reason))
 
 
 class Configuration(object):
