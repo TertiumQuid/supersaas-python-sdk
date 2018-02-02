@@ -10,7 +10,7 @@ class Users(BaseApi):
             return User(res)
         else:
             params = {
-                'form': form == True if form else None,
+                'form': 'true' if form else None,
                 'limit': self._validate_number(limit) if limit else None,
                 'offset': self._validate_number(offset) if offset else None
             }
@@ -20,21 +20,21 @@ class Users(BaseApi):
     def create(self, attributes, user_id=None):
         path = self.__user_path(user_id)
         params = {
-            'webhook': attributes['webhook'],
+            'webhook': attributes.get('webhook', ''),
             'user': {
-                'name': self._validate_present(attributes['name']),
-                'email': attributes['email'],
-                'password': attributes['password'],
-                'full_name': attributes['full_name'],
-                'address': attributes['address'],
-                'mobile': attributes['mobile'],
-                'phone': attributes['phone'],
-                'country': attributes['country'],
-                'field_1': attributes['field_1'],
-                'field_2': attributes['field_2'],
-                'super_field': attributes['super_field'],
-                'credit': self._validate_number(attributes['credit']) if attributes['credit'] else None,
-                'role': self._validate_options(attributes['role'], [3, 4, -1]) if attributes['role'] else None
+                'name': self._validate_present(attributes.get('name','')),
+                'email': attributes.get('email',''),
+                'password': attributes.get('password',''),
+                'full_name': attributes.get('full_name',''),
+                'address': attributes.get('address',''),
+                'mobile': attributes.get('mobile',''),
+                'phone': attributes.get('phone',''),
+                'country': attributes.get('country',''),
+                'field_1': attributes.get('field_1',''),
+                'field_2': attributes.get('field_2',''),
+                'super_field': attributes.get('super_field',''),
+                'credit': self._validate_number(attributes['credit']) if attributes.get('credit','') else None,
+                'role': self._validate_options(attributes['role'], [3, 4, -1]) if attributes.get('role','') else None
             }
         }
         res = self.client.request('POST', path, params)
@@ -43,21 +43,21 @@ class Users(BaseApi):
     def update(self, user_id, attributes):
         path = self.__user_path(user_id)
         params = {
-            'webhook': attributes['webhook'],
+            'webhook': attributes.get('webhook', ''),
             'user': {
-                'name': self._validate_present(attributes['name']),
-                'email': attributes['email'],
-                'password': attributes['password'],
-                'full_name': attributes['full_name'],
-                'address': attributes['address'],
-                'mobile': attributes['mobile'],
-                'phone': attributes['phone'],
-                'country': attributes['country'],
-                'field_1': attributes['field_1'],
-                'field_2': attributes['field_2'],
-                'super_field': attributes['super_field'],
-                'credit': self._validate_number(attributes['credit']) if attributes['credit'] else None,
-                'role': self._validate_options(attributes['role'], [3, 4, -1]) if attributes['role'] else None
+                'name': self._validate_present(attributes.get('name','')),
+                'email': attributes.get('email',''),
+                'password': attributes.get('password',''),
+                'full_name': attributes.get('full_name',''),
+                'address': attributes.get('address',''),
+                'mobile': attributes.get('mobile',''),
+                'phone': attributes.get('phone',''),
+                'country': attributes.get('country',''),
+                'field_1': attributes.get('field_1',''),
+                'field_2': attributes.get('field_2',''),
+                'super_field': attributes.get('super_field',''),
+                'credit': self._validate_number(attributes['credit']) if attributes.get('credit','') else None,
+                'role': self._validate_options(attributes['role'], [3, 4, -1]) if attributes.get('role','') else None
             }
         }
         return self.client.request('PUT', path, params)
@@ -66,5 +66,5 @@ class Users(BaseApi):
         path = self.__user_path(self._validate_id(user_id))
         return self.client.request('DELETE', path)
 
-    def __user_path(self, id):
-        return "/users/{}.json".format(id) if id else "/users.json"
+    def __user_path(self, user_id):
+        return "/users/{}.json".format(user_id) if user_id else "/users.json"

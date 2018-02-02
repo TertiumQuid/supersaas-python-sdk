@@ -25,7 +25,7 @@ class BaseApi(object):
 
     def _validate_datetime(self, value):
         if isinstance(value, datetime.datetime):
-            return strftime("%Y-%m-%d %H:%M:%S", value)
+            return value.strftime("%Y-%m-%d %H:%M:%S")
         elif isinstance(value, str) and self.DATETIME_REGEX.match(value):
             return value
         else:

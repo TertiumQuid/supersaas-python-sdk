@@ -20,7 +20,8 @@ from base64 import b64encode
 from . import API
 from .Error import Error
 
-PYTHON_VERSION = '.'.join(sys.version_info)
+PYTHON_VERSION = '.'.join([str(info) for info in sys.version_info])
+
 API_VERSION = '1'
 VERSION = '0.1.0'
 
@@ -38,7 +39,7 @@ class Client(object):
         return cls.__singleton_instance
 
     @classmethod
-    def configure(cls, account_name, password, user_name, test=False, host=None):
+    def configure(cls, account_name, password, user_name=None, test=False, host=None):
         cls.instance().account_name = account_name
         cls.instance().password = password
         cls.instance().user_name = user_name
@@ -46,7 +47,7 @@ class Client(object):
         cls.instance().test = host or cls.instance().host
 
     @classmethod
-    def _user_agent(self):
+    def _user_agent(cls):
         return "SSS/{} Python/{} API/{}".format(VERSION, PYTHON_VERSION, API_VERSION)
 
     def __init__(self, configuration):
@@ -89,8 +90,11 @@ class Client(object):
             querystring = urlencode(query)
             url = "{}?{}".format(url, querystring)
 
-        data = dict(filter(lambda item: item[1] is not None, params.items()))
-        data = json.dumps(data)
+        if params:
+            data = dict(filter(lambda item: item[1] is not None, params.items()))
+            data = json.dumps(data)
+        else:
+            data = None
         req = Request(url, data, headers)
 
         if http_method == 'GET':
@@ -105,6 +109,8 @@ class Client(object):
             raise Error("Invalid HTTP Method: {}. Only `GET`, `POST`, `PUT`, `DELETE` supported.".format(http_method))
 
         self.last_request = req
+        if self.test:
+            return {}
 
         try:
             res = urlopen(req)
