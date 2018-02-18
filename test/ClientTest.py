@@ -1,5 +1,5 @@
 from .Helper import *
-from SuperSaaS import SDK
+import SuperSaaS
 
 
 class ClientTest(SupersaasTest):
@@ -14,7 +14,6 @@ class ClientTest(SupersaasTest):
             self.assertIsNotNone(self.client.request(method, '/test', {'test': True}))
 
     def test_instance_configuration(self):
-        self.client.configure(account_name='account', password='password', user_name='user')
-        self.assertEqual('account', SDK.Client.instance().account_name)
-        self.assertEqual('password', SDK.Client.instance().password)
-        self.assertEqual('user', SDK.Client.instance().user_name)
+        self.client.configure(account_name='account', password='password')
+        self.assertEqual('account', SuperSaaS.Client.instance().account_name)
+        self.assertEqual('password', SuperSaaS.Client.instance().password)

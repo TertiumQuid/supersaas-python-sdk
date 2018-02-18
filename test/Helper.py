@@ -1,5 +1,6 @@
 import unittest
-from SuperSaaS import SDK
+from SuperSaaS import Client
+from SuperSaaS import Configuration
 
 
 class SupersaasTest(unittest.TestCase):
@@ -9,8 +10,8 @@ class SupersaasTest(unittest.TestCase):
         self.__fileName = ""
         self.__file = None
 
-        self.config = SDK.Configuration()
-        self.client = SDK.Client(self.config)
+        self.config = Configuration()
+        self.client = Client(self.config)
         self.client.account_name = 'test'
         self.client.password = 'test'
-        self.client.test = True
+        self.client.dry_run = True

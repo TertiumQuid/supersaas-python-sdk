@@ -2,16 +2,16 @@ from .Helper import *
 
 
 class UsersTest(SupersaasTest):
-    def test_get_one(self):
+    def test_get(self):
         user_id = 12345
         self.assertIsNotNone(self.client.users.get(user_id))
 
-    def test_get_one_fk(self):
+    def test_get_fk(self):
         user_fk = '6789fk'
         self.assertIsNotNone(self.client.users.get(user_fk))
 
-    def test_get_all(self):
-        self.assertIsNotNone(self.client.users.get(None, True, 10, 10))
+    def test_list(self):
+        self.assertIsNotNone(self.client.users.list(True, 10, 10))
 
     def test_create(self):
         self.assertIsNotNone(self.client.users.create(self.__user_attributes()))

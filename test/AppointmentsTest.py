@@ -4,13 +4,13 @@ from .Helper import *
 
 class AppointmentsTest(SupersaasTest):
 
-    def test_get_one(self):
+    def test_get(self):
         schedule_id = 12345
         self.assertIsNotNone(self.client.appointments.get(schedule_id))
 
-    def test_get_all(self):
+    def test_list(self):
         schedule_id = 12345
-        self.assertIsNotNone(self.client.appointments.get(schedule_id, None, True, datetime.now(), 10))
+        self.assertIsNotNone(self.client.appointments.list(schedule_id, True, datetime.now(), 10))
 
     def test_create(self):
         user_id = 67890

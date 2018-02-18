@@ -1,7 +1,6 @@
 import re
 import datetime
-from time import strftime
-from SuperSaaS.SDK.Error import Error
+from SuperSaaS.Error import Error
 
 
 class BaseApi(object):
